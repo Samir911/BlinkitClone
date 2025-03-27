@@ -1,49 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, Alert, TouchableWithoutFeedback, Image, Pressable, StyleSheet, TouchableHighlight, TouchableOpacity } from "react-native";
-import { signInWithPhoneNumber, PhoneAuthProvider, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
+import React, { useState } from "react";
+import { Image, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AuthScreen = ({ navigation }) => {
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [verificationId, setVerificationId] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Automatically check if user is logged in
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigation.replace("Home"); // If logged in, go to Home
-      } else {
-        setLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const sendOtp = async () => {
-    try {
-      const confirmation = await signInWithPhoneNumber(auth, phone);
-      setVerificationId(confirmation.verificationId);
-      Alert("OTP sent successfully!");
-    } catch (error) {
-      Alert(error.message);
-    }
-  };
-
-  const verifyOtp = async () => {
-    try {
-      const credential = PhoneAuthProvider.credential(verificationId, otp);
-      await auth.signInWithCredential(credential);
-      navigation.replace("Home");
-    } catch (error) {
-      Alert("Invalid OTP");
-    }
-  };
-
-  if (loading) return <Text style={{ flex: 1, justifyContent: 'center', textAlign: 'center' }}>Loading...</Text>; // Show loading while checking session
 
   return (
     <View style={styles.container}>
@@ -89,15 +49,6 @@ const AuthScreen = ({ navigation }) => {
       <View style={styles.divider} />
       <Text style={styles.tearmsCondition}>By continuing, you agree to our Terms of Service & Privacy Policy.</Text>
 
-      {/* <Button title="Send OTP" onPress={sendOtp} />
-
-      {verificationId && (
-        <>
-          <Text>Enter OTP</Text>
-          <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" />
-          <Button title="Verify OTP" onPress={verifyOtp} />
-        </>
-      )} */}
     </View>
   );
 };

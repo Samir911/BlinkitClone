@@ -1,34 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Alert, TouchableOpacity, StyleSheet } from "react-native";
-import { signInWithPhoneNumber, PhoneAuthProvider } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import auth from "@react-native-firebase/auth";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import OtpInputs from "react-native-otp-inputs";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthOtpScreen = ({ navigation, route }) => {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
-  const [verificationId, setVerificationId] = useState(null);
+  const [confirmation, setConfirmation] = useState(null);
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
 
   useEffect(() => {
-    if (route.params && route.params.phone) {
-      const phoneNumber = route?.params?.phone;
+    if (route.params?.phone) {
+      const phoneNumber = route.params.phone;
       setPhone(phoneNumber);
       sendOtp(phoneNumber);
     }
   }, []);
 
   useEffect(() => {
-    if (verificationId) {
+    if (confirmation) {
       const interval = setInterval(() => {
         setTimer((prev) => (prev > 0 ? prev - 1 : 0));
         if (timer === 0) setCanResend(true);
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [verificationId, timer]);
+  }, [confirmation, timer]);
 
   useEffect(() => {
     if (otp.length === 6) {
@@ -36,27 +37,42 @@ const AuthOtpScreen = ({ navigation, route }) => {
     }
   }, [otp]);
 
+  const showToast = (type, message) => {
+    Toast.show({
+      type: type, // 'success' or 'error'
+      text1: message,
+      position: "top",
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+  };
+
   const sendOtp = async (phoneNumber) => {
     try {
       const formattedPhone = phoneNumber.startsWith("+") ? phoneNumber : `+91${phoneNumber}`;
-      console.log(formattedPhone);
-      const confirmation = await signInWithPhoneNumber(auth, formattedPhone);
-      setVerificationId(confirmation.verificationId);
+      const confirmationResult = await auth().signInWithPhoneNumber(formattedPhone);
+      setConfirmation(confirmationResult);
       setTimer(30);
       setCanResend(false);
-      Alert.alert("Success", "OTP sent successfully!");
+      showToast("success", "OTP sent successfully!");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      showToast("error", error.message);
     }
   };
 
   const verifyOtp = async () => {
     try {
-      const credential = PhoneAuthProvider.credential(verificationId, otp);
-      await auth.signInWithCredential(credential);
-      navigation.replace("Home"); // ✅ Fixed typo
+      if (!confirmation) {
+        showToast("error", "No verification ID found. Please resend OTP.");
+        return;
+      }
+      const userCredential = await confirmation.confirm(otp);
+      // Store user data in AsyncStorage
+      await AsyncStorage.setItem("user", JSON.stringify(userCredential.user));
+      showToast("success", "OTP Verified Successfully!");
+      navigation.navigate("Home");
     } catch (error) {
-      Alert.alert("Invalid OTP");
+      showToast("error", "Invalid OTP");
     }
   };
 
@@ -67,7 +83,7 @@ const AuthOtpScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={20} color="black" />
         </TouchableOpacity>
-        <Text style={styles.title}>OTP verification</Text>
+        <Text style={styles.title}>OTP Verification</Text>
       </View>
 
       {/* Description */}
@@ -76,9 +92,7 @@ const AuthOtpScreen = ({ navigation, route }) => {
 
       {/* OTP Input */}
       <OtpInputs
-        handleChange={(code) => {
-          setTimeout(() => setOtp(code), 0); 
-        }} 
+        handleChange={setOtp}
         numberOfInputs={6}
         style={styles.otpContainer}
         inputStyles={styles.otpInput}
@@ -92,6 +106,9 @@ const AuthOtpScreen = ({ navigation, route }) => {
       ) : (
         <Text style={styles.resendOtp}>Resend OTP in {timer} sec</Text>
       )}
+
+      {/* Toast Message Component */}
+      <Toast />
     </View>
   );
 };
