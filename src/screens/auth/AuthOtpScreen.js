@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import auth from "@react-native-firebase/auth";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import OtpInputs from "react-native-otp-inputs";
 import Toast from "react-native-toast-message";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const AuthOtpScreen = ({ navigation, route }) => {
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(route.params?.phone || "");
   const [otp, setOtp] = useState("");
   const [confirmation, setConfirmation] = useState(null);
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
 
   useEffect(() => {
-    if (route.params?.phone) {
-      const phoneNumber = route.params.phone;
-      setPhone(phoneNumber);
-      sendOtp(phoneNumber);
+    if (phone) {
+      sendOtp(phone);
     }
   }, []);
 
   useEffect(() => {
-    if (confirmation) {
-      const interval = setInterval(() => {
-        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-        if (timer === 0) setCanResend(true);
+    let interval;
+    if (confirmation && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => (prev > 1 ? prev - 1 : 0));
       }, 1000);
-      return () => clearInterval(interval);
+    } else if (timer === 0) {
+      setCanResend(true);
     }
+    return () => clearInterval(interval);
   }, [confirmation, timer]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const AuthOtpScreen = ({ navigation, route }) => {
 
   const showToast = (type, message) => {
     Toast.show({
-      type: type, // 'success' or 'error'
+      type,
       text1: message,
       position: "top",
       visibilityTime: 3000,
@@ -67,10 +67,19 @@ const AuthOtpScreen = ({ navigation, route }) => {
         return;
       }
       const userCredential = await confirmation.confirm(otp);
-      // Store user data in AsyncStorage
+
+      console.log('1111111111111', userCredential);
+
+      // Store user session in AsyncStorage
       await AsyncStorage.setItem("user", JSON.stringify(userCredential.user));
+
       showToast("success", "OTP Verified Successfully!");
-      navigation.navigate("Home");
+
+      // Navigate to Home Screen & prevent going back
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "BottomTabNavigator" }],
+      });
     } catch (error) {
       showToast("error", "Invalid OTP");
     }
@@ -92,7 +101,9 @@ const AuthOtpScreen = ({ navigation, route }) => {
 
       {/* OTP Input */}
       <OtpInputs
-        handleChange={setOtp}
+        handleChange={(code) => {
+          setTimeout(() => setOtp(code), 0);
+        }}
         numberOfInputs={6}
         style={styles.otpContainer}
         inputStyles={styles.otpInput}

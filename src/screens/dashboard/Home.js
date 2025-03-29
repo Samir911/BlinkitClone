@@ -2,6 +2,7 @@ import React from "react";
 import {
   FlatList,
   Image,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -10,8 +11,10 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Colors from "../../style/Colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const HomeScreen = ({ navigation }) => {
+const Home = ({ navigation }) => {
   const categories = [
     {
       title: "Grocery & Kitchen",
@@ -42,7 +45,7 @@ const HomeScreen = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View>
@@ -52,8 +55,8 @@ const HomeScreen = ({ navigation }) => {
             Millenium Business Park, Kopar <MaterialIcons name="arrow-drop-down" size={18} />
           </Text>
         </View>
-        <TouchableOpacity>
-          <Ionicons name="person-circle-outline" size={32} color="black" />
+        <TouchableOpacity style={{opacity: 0.5}}>
+          <Ionicons name="person-circle-outline" size={32} color="#404040" />
         </TouchableOpacity>
       </View>
 
@@ -87,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
       />
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
+      {/* <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}>
           <Ionicons name="home-outline" size={24} color="black" />
           <Text style={styles.navText}>Home</Text>
@@ -109,19 +112,20 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.districtText}>district</Text>
           </View>
         </TouchableOpacity>
-      </View>
-    </View>
+      </View> */}
+      <StatusBar backgroundColor={Colors.white} barStyle={'dark-content'} translucent />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFED" },
+  container: { flex: 1, backgroundColor: Colors.white },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: 'center',
     paddingHorizontal: 15,
-    backgroundColor: "#FFFFED",
+    backgroundColor: Colors.white,
   },
   deliveryTime: { fontSize: 12, fontWeight: "bold", fontFamily: "Montserrat-Bold", marginBottom: 1 },
   time: { fontSize: 18, fontWeight: "bold", fontFamily: "Montserrat-Bold" },
@@ -135,14 +139,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
   },
-  searchIcon: { marginRight: 10, color: 'black' },
+  searchIcon: { marginRight: 10, color: '#323232' },
   searchInput: { flex: 1, fontSize: 14, fontFamily: "Montserrat-MEdium" },
   categorySection: { marginTop: 15, marginHorizontal: 10 },
-  categoryTitle: { fontSize: 16, fontWeight: "bold", marginBottom: 10, fontFamily: "Montserrat-Bold" },
+  categoryTitle: { fontSize: 16, fontWeight: "bold", marginBottom: 10, fontFamily: "Montserrat-Bold", color: Colors.gunmetalGray },
   categoryGrid: { flexDirection: "row", flexWrap: "wrap" },
   categoryCard: { width: "23%", alignItems: "center", marginBottom: 15, marginRight: "2%" },
-  categoryImage: { width: 80, height: 80, borderRadius: 15, backgroundColor: '#EDEDFF', padding: 5 },
-  categoryText: { textAlign: "center", fontSize: 12, marginTop: 5, fontFamily: "Montserrat-Medium" },
+  categoryImage: { width: 80, height: 80, borderRadius: 15, backgroundColor: Colors.iceBlue, padding: 5 },
+  categoryText: { textAlign: "center", fontSize: 12, marginTop: 5, fontFamily: "Montserrat-Medium", color: Colors.CharcoalGray },
   bottomNav: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -162,4 +166,4 @@ const styles = StyleSheet.create({
   districtText: { color: "white", fontSize: 12, fontWeight: "bold", fontFamily: "Montserrat-Bold" },
 });
 
-export default HomeScreen;
+export default Home;

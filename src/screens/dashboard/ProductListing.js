@@ -1,6 +1,8 @@
-import React from "react";
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Colors from "../../style/Colors";
 
 const categories = [
     { name: "All", image: "https://via.placeholder.com/50" },
@@ -9,6 +11,8 @@ const categories = [
     { name: "Exotics", image: "https://via.placeholder.com/50" },
     { name: "Coriander & Others", image: "https://via.placeholder.com/50" },
     { name: "Flowers & Leaves", image: "https://via.placeholder.com/50" },
+    { name: "Seasonal", image: "https://via.placeholder.com/50" },
+    { name: "Freshly Cut & Sprouts", image: "https://via.placeholder.com/50" },
 ];
 
 const filters = ["Filters", "Sort", "Onion", "Tomato"];
@@ -54,29 +58,60 @@ const products = [
         time: "15 MINS",
         image: "https://via.placeholder.com/150",
     },
+    {
+        id: "5",
+        name: "Coriander Bunch",
+        weight: "2 x 100 g",
+        price: 23,
+        mrp: 30,
+        discount: "23% OFF",
+        time: "15 MINS",
+        image: "https://via.placeholder.com/150",
+    },
+    {
+        id: "6",
+        name: "Coriander Bunch",
+        weight: "2 x 100 g",
+        price: 23,
+        mrp: 30,
+        discount: "23% OFF",
+        time: "15 MINS",
+        image: "https://via.placeholder.com/150",
+    },
 ];
 
-const ProductListingScreen = ({ navigation, route }) => {
+const ProductListing = ({ navigation, route }) => {
+
+    const [selectedSubCategory, setSelectedSubCategory] = useState('All');
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                    <Ionicons name="arrow-back" size={20} color="black" />
+                    <Ionicons name="arrow-back" size={20} color={Colors.black} />
                 </TouchableOpacity>
                 <Text style={styles.title}>{route.params.title}</Text>
             </View>
 
             <View style={styles.mainContent}>
                 {/* Sidebar Categories */}
-                <ScrollView style={styles.sidebar} showsVerticalScrollIndicator={false}>
-                    {categories.map((item, index) => (
-                        <View key={index} style={styles.categoryItem}>
-                            <Image source={{ uri: item.image }} style={styles.categoryImage} />
-                            <Text style={styles.categoryText}>{item.name}</Text>
-                        </View>
-                    ))}
-                </ScrollView>
+                <View>
+                    <ScrollView style={styles.sidebar} showsVerticalScrollIndicator={false}>
+                        {categories.map((item, index) => (
+                            <TouchableWithoutFeedback onPress={() => setSelectedSubCategory(item.name)}>
+                                <View key={index} style={styles.categoryItem}>
+                                    <View style={{ flex: 1, flexDirection: 'column', alignItems: "center",  paddingBottom: 5, marginEnd: item.name === selectedSubCategory ? 5 : 10 }}>
+                                        <Image source={{ uri: item.image }} style={styles.categoryImage} />
+                                        <Text style={styles.categoryText}>{item.name}</Text>
+                                    </View>
+                                    {item.name === selectedSubCategory && <View style={{ flexDirection: 'column', width: 5, height: '100%', backgroundColor: Colors.accent, borderTopLeftRadius: 15, borderBottomLeftRadius: 15 }} />
+                                    }
+                                </View>
+                            </TouchableWithoutFeedback>
+                        ))}
+                    </ScrollView>
+                </View>
 
                 {/* Product List */}
                 <View style={styles.productContainer}>
@@ -107,21 +142,21 @@ const ProductListingScreen = ({ navigation, route }) => {
                         )}
                     />
                 </View>
-            </View>
-        </View>
+            </View >
+        </SafeAreaView >
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#fff" },
+    container: { flex: 1, backgroundColor: Colors.white },
     header: { flexDirection: "row", padding: 15, borderBottomWidth: 1, borderColor: "#ddd", alignItems: "center" },
-    title: { fontSize: 16, fontFamily: "Montserrat-Bold", marginLeft: 10 },
-    mainContent: { flexDirection: "row" },
-    sidebar: { backgroundColor: "#f8f8f8", paddingVertical: 10, borderRightWidth:1 },
-    categoryItem: { width: 80, alignItems: "center", marginBottom: 15 },
-    categoryImage: { width: 50, height: 50, borderRadius: 25, padding: 5, backgroundColor: 'silver', marginBottom:5 },
+    title: { fontSize: 16, fontFamily: "Montserrat-Bold", marginLeft: 10, color: Colors.black },
+    mainContent: { flex: 1, flexDirection: "row" },
+    sidebar: { flexDirection: 'column', backgroundColor:Colors.white, borderRightWidth: 1, borderColor: '#f4f4f4' },
+    categoryItem: { flexDirection: 'row', width: 90 },
+    categoryImage: { width: 50, height: 50, borderRadius: 25, padding: 5, marginTop: 15, backgroundColor: '#ecffec', marginBottom: 5 },
     categoryText: { fontSize: 12, fontFamily: "Montserrat-Medium", textAlign: 'center' },
-    productContainer: { padding: 10 },
+    productContainer: { flex: 1, padding: 10 },
     filtersRow: { flexDirection: "row", marginBottom: 10 },
     filterButton: { padding: 8, borderRadius: 5, backgroundColor: "#e0e0e0", marginRight: 8 },
     filterText: { fontSize: 12, fontFamily: "Montserrat-Medium" },
@@ -135,4 +170,4 @@ const styles = StyleSheet.create({
     addButtonText: { color: "white", fontFamily: "Montserrat-Bold", textAlign: "center" },
 });
 
-export default ProductListingScreen;
+export default ProductListing;
