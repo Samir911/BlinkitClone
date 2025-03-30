@@ -6,7 +6,7 @@ import Colors from "../../style/Colors";
 
 const categories = [
     { name: "All", image: "https://via.placeholder.com/50" },
-    { name: "Fresh Vegetables", image: "https://via.placeholder.com/50" },
+    { name: "Fresh Vegetables", image: "https://cdn.grofers.com/app/images/category/cms_images/rc-upload-1702463308432-3" },
     { name: "Fresh Fruits", image: "https://via.placeholder.com/50" },
     { name: "Exotics", image: "https://via.placeholder.com/50" },
     { name: "Coriander & Others", image: "https://via.placeholder.com/50" },
@@ -101,8 +101,10 @@ const ProductListing = ({ navigation, route }) => {
                         {categories.map((item, index) => (
                             <TouchableWithoutFeedback onPress={() => setSelectedSubCategory(item.name)}>
                                 <View key={index} style={styles.categoryItem}>
-                                    <View style={{ flex: 1, flexDirection: 'column', alignItems: "center",  paddingBottom: 5, marginEnd: item.name === selectedSubCategory ? 5 : 10 }}>
-                                        <Image source={{ uri: item.image }} style={styles.categoryImage} />
+                                    <View style={{ flex: 1, flexDirection: 'column', alignItems: "center", paddingBottom: 5, marginEnd: item.name === selectedSubCategory ? 5 : 10 }}>
+                                        <View style={{ width: 50, height: 50, borderRadius: 25, padding: 10, marginTop: 15, backgroundColor: '#ecffec', marginBottom: 5, alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image source={{ uri: item.image }} style={styles.categoryImage} />
+                                        </View>
                                         <Text style={styles.categoryText}>{item.name}</Text>
                                     </View>
                                     {item.name === selectedSubCategory && <View style={{ flexDirection: 'column', width: 5, height: '100%', backgroundColor: Colors.accent, borderTopLeftRadius: 15, borderBottomLeftRadius: 15 }} />
@@ -152,9 +154,9 @@ const styles = StyleSheet.create({
     header: { flexDirection: "row", padding: 15, borderBottomWidth: 1, borderColor: "#ddd", alignItems: "center" },
     title: { fontSize: 16, fontFamily: "Montserrat-Bold", marginLeft: 10, color: Colors.black },
     mainContent: { flex: 1, flexDirection: "row" },
-    sidebar: { flexDirection: 'column', backgroundColor:Colors.white, borderRightWidth: 1, borderColor: '#f4f4f4' },
+    sidebar: { flexDirection: 'column', backgroundColor: Colors.white, borderRightWidth: 1, borderColor: '#f4f4f4' },
     categoryItem: { flexDirection: 'row', width: 90 },
-    categoryImage: { width: 50, height: 50, borderRadius: 25, padding: 5, marginTop: 15, backgroundColor: '#ecffec', marginBottom: 5 },
+    categoryImage: { width: 40, height: 40, resizeMode: 'contain' },
     categoryText: { fontSize: 12, fontFamily: "Montserrat-Medium", textAlign: 'center' },
     productContainer: { flex: 1, padding: 10 },
     filtersRow: { flexDirection: "row", marginBottom: 10 },

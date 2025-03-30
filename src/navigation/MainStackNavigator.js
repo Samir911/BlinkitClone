@@ -9,6 +9,12 @@ import BottomTabNavigator from './BottomTabNavigator';
 
 const Stack = createStackNavigator();
 
+// function OtherStackNavigator() {
+//     return <Stack.Navigator initialRouteName='Profile' screenOptions={{ gestureEnabled: false, headerShown: false }} >
+//         <Stack.Screen name='Profile' component={Profile} />
+//     </Stack.Navigator>
+// }
+
 function MainStackNavigator() {
     return <NavigationContainer>
         <Stack.Navigator initialRouteName='Splash' screenOptions={{ gestureEnabled: false, headerShown: false }} >
@@ -17,6 +23,7 @@ function MainStackNavigator() {
             <Stack.Screen name='AuthScreen' component={AuthScreen} />
             <Stack.Screen name='AuthOtpScreen' component={AuthOtpScreen} />
             <Stack.Screen name='BottomTabNavigator' component={BottomTabNavigator} />
+            {/* <Stack.Screen name='other' component={OtherStackNavigator} /> */}
         </Stack.Navigator>
     </NavigationContainer>
 }
