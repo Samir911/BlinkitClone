@@ -212,7 +212,7 @@ const Home = ({ navigation }) => {
                 ) : (
                   item.items.map((category, index) => (
                     <TouchableOpacity key={index} style={styles.categoryCard1} onPress={() => {
-                      if (category.name === 'Vegetables & Fruits') {
+                      if (category.title === 'Vegetables & Fruits') {
                         navigation.navigate('ProductListing', { title: category.name });
                       } else {
                         null

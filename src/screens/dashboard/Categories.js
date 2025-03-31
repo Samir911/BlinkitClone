@@ -132,7 +132,11 @@ const Categories = ({ navigation }) => {
                 item.title !== 'Bestsellers' ? (
                   item.items.map((category, index) => (
                     <TouchableOpacity key={index} style={styles.categoryCard} onPress={() => {
-                      navigation.navigate('ProductListing', { title: category.name });
+                      if (category.name === 'Vegetables & Fruits') {
+                        navigation.navigate('ProductListing', { title: category.name });
+                      } else {
+                        null
+                      }
                     }}>
                       <View style={{ width: 80, height: 80, padding: 20, justifyContent: 'center', alignItems: 'center', borderRadius: 15, backgroundColor: Colors.iceBlue }}>
                         <Image source={{ uri: category.image }} style={styles.categoryImage} />
@@ -143,7 +147,11 @@ const Categories = ({ navigation }) => {
                 ) : (
                   item.items.map((category, index) => (
                     <TouchableOpacity key={index} style={styles.categoryCard1} onPress={() => {
-                      navigation.navigate('ProductListing', { title: category.name });
+                      if (category.name === 'Vegetables & Fruits') {
+                        navigation.navigate('ProductListing', { title: category.name });
+                      } else {
+                        null
+                      }
                     }}>
                       <View style={{ padding: 5, borderRadius: 15, backgroundColor: Colors.iceBlue }}>
                         <View style={{ flex: 1, flexDirection: 'row', gap: 2 }}>

@@ -53,6 +53,8 @@ const Print = ({ navigation }) => {
         </LinearGradient>
       </View>
 
+      <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "Montserrat-Bold", color: Colors.CharcoalGray, textAlign: 'center', marginTop: 25 }}>Comming soon...</Text>
+
       {cartItems.items.length > 0 && <TouchableWithoutFeedback onPress={() => navigation.navigate('Checkout')}>
         <View style={{ flexDirection: 'row', padding: 7, alignSelf: 'center', backgroundColor: Colors.accent, borderRadius: 30, position: 'absolute', bottom: 10 }}>
           <View>
