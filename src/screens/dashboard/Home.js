@@ -252,7 +252,7 @@ const Home = ({ navigation }) => {
       />
 
       {cartItems.items.length > 0 && <TouchableWithoutFeedback onPress={() => navigation.navigate('Checkout')}>
-        <View style={{ flexDirection: 'row', padding: 10, alignSelf: 'center', backgroundColor: Colors.accent, borderRadius: 30, position: 'absolute', bottom: 10 }}>
+        <View style={{ flexDirection: 'row', padding: 7, alignSelf: 'center', backgroundColor: Colors.accent, borderRadius: 30, position: 'absolute', bottom: 10 }}>
           <View>
             <FlatList
               data={cartItems.items.slice(-3).reverse()}
@@ -266,7 +266,7 @@ const Home = ({ navigation }) => {
               style={{ marginEnd: 10 }}
             />
           </View>
-          <View style={{ flexDirection: 'column' }}>
+          <View style={{ flexDirection: 'column', marginEnd: 5 }}>
             <Text style={styles.cartButtonText}>View cart</Text>
             <Text style={styles.cartCountButtonText}>{`${cartItems.totalQuantity} ITEMS`}</Text>
           </View>
@@ -344,8 +344,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  cartButtonText: { fontSize: 14, color: Colors.white, fontFamily: "Montserrat-Bold" },
-  cartCountButtonText: { fontSize: 12, color: Colors.white, fontFamily: "Montserrat-Regular" },
+  cartButtonText: { fontSize: 14, color: Colors.white, fontFamily: "Montserrat-Bold", marginTop: 3 },
+  cartCountButtonText: { fontSize: 11, color: Colors.white, fontFamily: "Montserrat-Regular", marginTop: -3 },
   cartImage: { width: 40, height: 40, resizeMode: 'contain', borderRadius: 30 }
 });
 

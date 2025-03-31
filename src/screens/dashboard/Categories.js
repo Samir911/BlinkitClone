@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -177,28 +178,30 @@ const Categories = ({ navigation }) => {
         scrollEventThrottle={16} // Improves performance
       />
 
-      {cartItems.items.length > 0 && <View style={{ flexDirection: 'row', padding: 10, alignSelf: 'center', backgroundColor: Colors.accent, borderRadius: 30, position: 'absolute', bottom: 10 }}>
-        <View>
-          <FlatList
-            data={cartItems.items.slice(-3).reverse()}
-            horizontal={true}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item, index }) => (
-              <View style={{ width: 40, height: 40, backgroundColor: Colors.white, borderWidth: 2, borderColor: 'green', borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginStart: index == 0 ? 0 : -15 }}>
-                <Image source={{ uri: item.image }} style={styles.cartImage} />
-              </View>
-            )}
-            style={{ marginEnd: 10 }}
-          />
+      {cartItems.items.length > 0 && <TouchableWithoutFeedback onPress={() => navigation.navigate('Checkout')}>
+        <View style={{ flexDirection: 'row', padding: 7, alignSelf: 'center', backgroundColor: Colors.accent, borderRadius: 30, position: 'absolute', bottom: 10 }}>
+          <View>
+            <FlatList
+              data={cartItems.items.slice(-3).reverse()}
+              horizontal={true}
+              keyExtractor={(item) => item.name}
+              renderItem={({ item, index }) => (
+                <View style={{ width: 40, height: 40, backgroundColor: Colors.white, borderWidth: 2, borderColor: 'green', borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginStart: index == 0 ? 0 : -15 }}>
+                  <Image source={{ uri: item.image }} style={styles.cartImage} />
+                </View>
+              )}
+              style={{ marginEnd: 10 }}
+            />
+          </View>
+          <View style={{ flexDirection: 'column', marginEnd: 5 }}>
+            <Text style={styles.cartButtonText}>View cart</Text>
+            <Text style={styles.cartCountButtonText}>{`${cartItems.totalQuantity} ITEMS`}</Text>
+          </View>
+          <View style={{ width: 40, height: 40, backgroundColor: 'green', borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginStart: 10 }}>
+            <Ionicons name={'chevron-forward-outline'} size={20} color={Colors.white} />
+          </View>
         </View>
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.cartButtonText}>View cart</Text>
-          <Text style={styles.cartCountButtonText}>{`${cartItems.totalQuantity} ITEMS`}</Text>
-        </View>
-        <View style={{ width: 40, height: 40, backgroundColor: 'green', borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginStart: 10 }}>
-          <Ionicons name={'chevron-forward-outline'} size={20} color={Colors.white} />
-        </View>
-      </View>}
+      </TouchableWithoutFeedback>}
 
       <StatusBar backgroundColor={'#f8cd4b'} barStyle={'dark-content'} translucent />
     </SafeAreaView>
@@ -268,8 +271,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  cartButtonText: { fontSize: 14, color: Colors.white, fontFamily: "Montserrat-Bold" },
-  cartCountButtonText: { fontSize: 12, color: Colors.white, fontFamily: "Montserrat-Regular" },
+  cartButtonText: { fontSize: 14, color: Colors.white, fontFamily: "Montserrat-Bold", marginTop: 3 },
+  cartCountButtonText: { fontSize: 11, color: Colors.white, fontFamily: "Montserrat-Regular", marginTop: -3 },
   cartImage: { width: 40, height: 40, resizeMode: 'contain', borderRadius: 30 }
 });
 
