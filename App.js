@@ -3,7 +3,10 @@ import auth from '@react-native-firebase/auth';
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from 'react-redux';
+import { PersistGate } from "redux-persist/integration/react";
 import MainStackNavigator from "./src/navigation/MainStackNavigator";
+import { persistor, store } from "./src/redux/store";
 import Loader from "./src/screens/view/Loader";
 
 export default function App() {
@@ -42,7 +45,11 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <View style={{ flex: 1 }} >
-        <MainStackNavigator />
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <MainStackNavigator />
+          </PersistGate>
+        </Provider>
       </View>
     </SafeAreaProvider>
   );

@@ -6,6 +6,7 @@ import { Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Categories from '../screens/dashboard/Categories';
+import Checkout from '../screens/dashboard/Checkout';
 import Home from '../screens/dashboard/Home';
 import OrderAgain from '../screens/dashboard/OrderAgain';
 import Print from '../screens/dashboard/Print';
@@ -19,6 +20,8 @@ const getTabBarVisibility = (route) => {
         return { display: 'none' };
     } else if (routeName === 'Profile') {
         return { display: 'none' };
+    } else if (routeName === 'Checkout') {
+        return { display: 'none' };
     }
     return { display: 'flex' };
 };
@@ -30,6 +33,7 @@ function HomeStackNavigator() {
     return <Stack.Navigator initialRouteName='Home' screenOptions={{ gestureEnabled: false, headerShown: false }} >
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='ProductListing' component={ProductListing} />
+        <Stack.Screen name='Checkout' component={Checkout} />
         <Stack.Screen name='Profile' component={Profile} />
     </Stack.Navigator>
 }
@@ -37,6 +41,7 @@ function HomeStackNavigator() {
 function OrderAgainStackNavigator() {
     return <Stack.Navigator initialRouteName='OrderAgain' screenOptions={{ gestureEnabled: false, headerShown: false }} >
         <Stack.Screen name='OrderAgain' component={OrderAgain} />
+        <Stack.Screen name='Checkout' component={Checkout} />
     </Stack.Navigator>
 }
 
@@ -44,6 +49,7 @@ function CategoriesStackNavigator() {
     return <Stack.Navigator initialRouteName='Categories' screenOptions={{ gestureEnabled: false, headerShown: false }} >
         <Stack.Screen name='Categories' component={Categories} />
         <Stack.Screen name='ProductListing' component={ProductListing} />
+        <Stack.Screen name='Checkout' component={Checkout} />
         <Stack.Screen name='Profile' component={Profile} />
     </Stack.Navigator>
 }
@@ -51,6 +57,7 @@ function CategoriesStackNavigator() {
 function PrintStackNavigator() {
     return <Stack.Navigator initialRouteName='Print' screenOptions={{ gestureEnabled: false, headerShown: false }} >
         <Stack.Screen name='Print' component={Print} />
+        <Stack.Screen name='Checkout' component={Checkout} />
     </Stack.Navigator>
 }
 

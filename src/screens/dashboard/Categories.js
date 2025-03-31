@@ -13,6 +13,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { shallowEqual, useSelector } from "react-redux";
 import Colors from "../../style/Colors";
 
 const Categories = ({ navigation }) => {
@@ -54,6 +55,7 @@ const Categories = ({ navigation }) => {
     },
   ];
 
+  const cartItems = useSelector(state => state.cart, shallowEqual);
   const flatListRef = useRef(null);
   const [showButton, setShowButton] = useState(false);
   const lastScrollY = useRef(0);
@@ -175,6 +177,29 @@ const Categories = ({ navigation }) => {
         scrollEventThrottle={16} // Improves performance
       />
 
+      {cartItems.items.length > 0 && <View style={{ flexDirection: 'row', padding: 10, alignSelf: 'center', backgroundColor: Colors.accent, borderRadius: 30, position: 'absolute', bottom: 10 }}>
+        <View>
+          <FlatList
+            data={cartItems.items.slice(-3).reverse()}
+            horizontal={true}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item, index }) => (
+              <View style={{ width: 40, height: 40, backgroundColor: Colors.white, borderWidth: 2, borderColor: 'green', borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginStart: index == 0 ? 0 : -15 }}>
+                <Image source={{ uri: item.image }} style={styles.cartImage} />
+              </View>
+            )}
+            style={{ marginEnd: 10 }}
+          />
+        </View>
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={styles.cartButtonText}>View cart</Text>
+          <Text style={styles.cartCountButtonText}>{`${cartItems.totalQuantity} ITEMS`}</Text>
+        </View>
+        <View style={{ width: 40, height: 40, backgroundColor: 'green', borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginStart: 10 }}>
+          <Ionicons name={'chevron-forward-outline'} size={20} color={Colors.white} />
+        </View>
+      </View>}
+
       <StatusBar backgroundColor={'#f8cd4b'} barStyle={'dark-content'} translucent />
     </SafeAreaView>
   );
@@ -243,6 +268,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  cartButtonText: { fontSize: 14, color: Colors.white, fontFamily: "Montserrat-Bold" },
+  cartCountButtonText: { fontSize: 12, color: Colors.white, fontFamily: "Montserrat-Regular" },
+  cartImage: { width: 40, height: 40, resizeMode: 'contain', borderRadius: 30 }
 });
 
 export default Categories;
